@@ -17,9 +17,7 @@ export class AuthController{
     static async login(req:Request, res:Response, next: NextFunction){
         try{
             const userData = req.body
-            //TODO validar el body (opcional)
             const token = await AuthService.login(userData.email, userData.password)
-            console.log(userData)
             //TODO inyectar cookie al cliente
             res.cookie('token', token, {
                 maxAge: 60*60*1000*3, // 3 horas de caducidad

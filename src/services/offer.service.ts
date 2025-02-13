@@ -49,6 +49,7 @@ export class OfferService {
      }
 
      static async create(idUser: number, offer: Offer){
+        console.log('creando',idUser)
         return await prisma.offer.create({
             data: {
                 ...offer,

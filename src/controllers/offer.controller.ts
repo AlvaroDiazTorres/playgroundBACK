@@ -18,6 +18,7 @@ export class OfferController{
 
     static async getAll(req:Request, res:Response, next: NextFunction){
         try{
+            //localhost:3000/offer?title=XXXXXX
             const { title } = req.query;
             const user = await OfferService.getAll(title as string)
             res.status(200).json(user)
@@ -30,10 +31,7 @@ export class OfferController{
         try{
             const offerData = req.body
             const userId = req.user?.id
-            
-
             if (!userId) throw new HttpException(400, "User creator ID is required");
-            
 
             const newOffer = await OfferService.create(userId, offerData)
             res.status(200).json(newOffer)

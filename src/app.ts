@@ -10,7 +10,7 @@ import compression from 'compression'
 import cookieParser  from 'cookie-parser'
 import cors  from 'cors'
 import morgan from 'morgan'
-import { libsql } from './database/database'
+
 const app = express()
 
 /* app.use(async (req, res, next) => {
@@ -23,10 +23,11 @@ app.use(cookieParser())
 //todo limitar cors
 //cambiar la url cuando deploy
 app.use(cors({
-    origin: ['http://localhost:5173','*'],
+    origin: ['http://localhost:5173', 'https://empleatetufrontend-gk1t.onrender.com'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true
-}))
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 app.use(express.json())
 app.use(helmet())
