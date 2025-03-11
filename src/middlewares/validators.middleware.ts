@@ -12,12 +12,9 @@ export const loginValidation = [
 ]
 
 export const offerValidation = [
-    body('title')
-        .isLength({min:4,max:40}).withMessage('Titulo mas de 4 caracteres'),
-    body('description').optional().isLength({max:2000}),
-    body('contactEmail').optional().isEmail().withMessage('Invalid email'),
-    body('published').optional().isISO8601().toDate().withMessage('Formato de fecha incorrecto'),
-    body('expired').isISO8601().toDate().withMessage('Formato de fecha incorrecto')
+    body('nombre')
+        .isLength({min:1,max:40}).withMessage('Titulo mas de 4 caracteres'),
+    body('descripcion').optional().isLength({max:2000}),
 ]
 
 export const categoryValidation = [

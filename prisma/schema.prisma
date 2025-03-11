@@ -17,47 +17,16 @@ model User {
   role               String?
   course             String?
   active             Boolean  @default(true)
-  accepNotifications Boolean  @default(true)
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
-  offers             Offer[]
-  rates              Rate[]
+  characters         Character[]
 }
 
-model Offer {
-  id            Int       @id @default(autoincrement())
-  title         String
-  description   String?
-  active        Boolean   @default(true)
-  contactEmail  String?
-  location      String?
-  published     DateTime  @default(now())
-  expired       DateTime
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  idCategory    Int?
-  idUserCreator Int
-  userCreator   User      @relation(fields: [idUserCreator], references: [id])
-  category      Category? @relation(fields: [idCategory], references: [id])
-  rates         Rate[]
-}
-
-model Category {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  offers    Offer[]
-}
-
-model Rate {
-  idUser    Int
-  idOffer   Int
-  value     Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  offer     Offer    @relation(fields: [idOffer], references: [id])
-  user      User     @relation(fields: [idUser], references: [id])
-
-  @@id([idUser, idOffer])
+model Character {
+  id                Int       @id @default(autoincrement())
+  name              String
+  subclass          String
+  level             Int @default(1)
+  description       String?
+  image             String?
+  idUserAuthor      Int
+  author            User    @relation(fields: [idUserAuthor], references: [id])
 }

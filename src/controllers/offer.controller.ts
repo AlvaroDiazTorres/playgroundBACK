@@ -66,12 +66,14 @@ export class OfferController{
     static async rate(req:Request, res:Response, next: NextFunction){
         try{
             const id = Number.parseInt(req.params.id)
+            console.log('id!!!', id)
             if (isNaN(id)) throw new HttpException(400, "Invalid offer ID");
 
             const {value} = req.body
             const userId = req.user?.id
             if(!userId) throw new HttpException(400, "User creator ID is required");
-
+            console.log('value!!!', value)
+            console.log('userId!!!', userId)
             await OfferService.rate(userId, id, value)
             res.status(200).json({message: 'Offer rate successfully'})
         }catch(error){
@@ -84,8 +86,23 @@ export class OfferController{
             const id = Number.parseInt(req.params.id)
             if (isNaN(id)) throw new HttpException(400, "Invalid offer ID");
 
-            await OfferService.getRate(id)
-            res.status(200).json({message: 'Offer rate successfully'})
+            const rate = await OfferService.getRate(id)
+            console.log(rate)
+            res.status(200).json(rate)
+        }catch(error){
+            next(error)
+        }
+    }
+    static async getMyRate(req:Request, res:Response, next: NextFunction){
+        try{
+            const id = Number.parseInt(req.params.id)
+            if (isNaN(id)) throw new HttpException(400, "Invalid offer ID");
+            
+            const userId = req.user?.id
+            if(!userId) throw new HttpException(400, "User creator ID is required");
+
+            const rate = await OfferService.getMyRate(userId, id)
+            res.status(200).json(rate)
         }catch(error){
             next(error)
         }

@@ -24,7 +24,7 @@ export class AuthService {
             data:{
                 ...user,
                 password: passwordEncrypted,
-                role: null
+                role: null,
             },
             omit:{
                 password:true
@@ -50,8 +50,8 @@ export class AuthService {
             TOKEN_PASSWORD, 
             {expiresIn:"1h"}
         )
-        // devolver el token
-        return token
+        // devolver el token y el usuario
+        return {token, user: { id: findUser.id, email: findUser.email, role: findUser.role } }
     }
 
 }

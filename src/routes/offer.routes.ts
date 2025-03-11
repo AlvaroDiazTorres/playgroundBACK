@@ -4,6 +4,7 @@ import { ValidationMiddleware } from "../middlewares/validation.middleware";
 import { OfferController } from "../controllers/offer.controller";
 import { isAuthenticate } from "@/middlewares/auth.middleware";
 import { isAdmin } from "@/middlewares/isAdmin.middleware";
+import { CharacterController } from "@/controllers/character.controller";
 const router = Router()
 
 //API REST FULL
@@ -24,6 +25,12 @@ router.put('/:id',isAuthenticate,isAdmin, offerValidation, ValidationMiddleware,
 router.post('/:id/rate/',isAuthenticate, rateValidation, OfferController.rate)  
 // Vemos que calificación (total) se le ha data a una oferta X
 router.get('/:id/rate/', isAuthenticate, OfferController.getRate)
+router.get('/:id/myRate/', isAuthenticate, OfferController.getMyRate)
+
+router.post('/character/:id', isAuthenticate, CharacterController.create)
+router.get('/character', CharacterController.getAll)
+router.get('/character/:id', CharacterController.getById)
+
 
 
 
