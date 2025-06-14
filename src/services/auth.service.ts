@@ -9,35 +9,37 @@ import jwt from "jsonwebtoken"
 const TOKEN_PASSWORD = process.env.TOKEN_PASSWORD || 'pass'
 
 export class AuthService {
-    static async register(user: User) {
-        // ver si el usuario no existe
-        // SELECT id,nombre FROM user WHERE email=user.email
-        const findUser = await prisma.user.findUnique({where: {email: user.email}})
-        if (findUser) throw new HttpException(409, `User ${user.email} already exists`)
+    static async register(userData: {
+        name: string;
+        surname: string;
+        email: string;
+        password: string;
+        role?: string;
+    }): Promise<Omit<User, 'password'>> {
+        const findUser: User | null = await prisma.user.findUnique({where: {email: userData.email}})
+        if (findUser) throw new HttpException(409, `This email ${userData.email} already exists`)
 
-        // encriptar el password
-        const passwordEncrypted = await bcrypt.hash(user.password, 10)
-        user.password=''
-        // guardar el usuario en la bd
-        // INSERT INTO user (name, password, email) VALUES (?,?,?)
-        return await prisma.user.create({
+        const passwordEncrypted = await bcrypt.hash(userData.password, 10)
+        
+        const createUserData = await prisma.user.create({
             data:{
-                ...user,
+                name: userData.name,
+                surname: userData.surname,
+                email: userData.email,
                 password: passwordEncrypted,
-                role: null,
+                role: userData.role || 'user',
+                active: true,
             },
             omit:{
                 password:true
             }
         })
+
+        return createUserData;
     }
 
-    static async login(email:string, password:string){
-         // ver si el usuario existe
-        //const query = `SELECT id, email, role, password FROM user WHERE email='${email}'`
-        //const findUsers = await prisma.$queryRawUnsafe(query) as User[]
-        //const findUser = findUsers[0]
-
+    static async login(email: string, password: string) {
+   
         const findUser = await prisma.user.findUnique({where:{email}})
         if(!findUser) throw new HttpException(401, 'Invalid user or password')
          // ver si el password coincide
@@ -54,4 +56,19 @@ export class AuthService {
         return {token, user: { id: findUser.id, email: findUser.email, role: findUser.role } }
     }
 
+    static async getUserById(id: number) {
+        const user = await prisma.user.findUnique({
+            where: { id },
+            select: {
+                id: true,
+                name: true,
+                surname: true,
+                email: true,
+                role: true,
+                active: true
+            }
+        });
+        if (!user) throw new HttpException(404, 'User not found');
+        return user;
+    }
 }

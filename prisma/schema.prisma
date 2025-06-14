@@ -8,6 +8,7 @@ datasource db {
   url      = "file:./dev.db"
 }
 
+
 model User {
   id                 Int      @id @default(autoincrement())
   name               String
@@ -15,18 +16,24 @@ model User {
   email              String   @unique
   password           String
   role               String?
-  course             String?
   active             Boolean  @default(true)
-  characters         Character[]
+  eventosGuardados   Evento[] @relation("EventosGuardados")
 }
 
-model Character {
-  id                Int       @id @default(autoincrement())
-  name              String
-  subclass          String
-  level             Int @default(1)
-  description       String?
-  image             String?
-  idUserAuthor      Int
-  author            User    @relation(fields: [idUserAuthor], references: [id])
+model Evento {
+  id  Int @id @default(autoincrement())
+  ciudad String
+  direccion String
+  fecha DateTime
+  frontImage String
+  backImage String
+  artistas Artist[]
+  usuariosAnotados User[] @relation("EventosGuardados")
+}
+
+model Artist {
+  id        Int     @id @default(autoincrement())
+  nombre    String
+  eventoId  Int
+  evento    Evento  @relation(fields: [eventoId], references: [id])
 }
