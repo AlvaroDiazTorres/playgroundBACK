@@ -17,10 +17,13 @@ app.use(cookieParser())
 
 //cambiar la url cuando deploy
 app.use(cors({
-    origin: ['http://localhost:5173', 'https://playground-front-five.vercel.app/'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    origin: ['http://localhost:5173', 'https://playground-front-five.vercel.app', 'http://localhost:3000'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     credentials: true,
-    allowedHeaders: ['Content-Type', 'Authorization']
+    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'Origin', 'Accept'],
+    exposedHeaders: ['Set-Cookie'],
+    preflightContinue: false,
+    optionsSuccessStatus: 204
 }));
 
 app.use(express.json())
@@ -32,6 +35,17 @@ const limiter = rateLimit({
     windowMs: 1000 * 15 * 60
 })
 app.use(limiter)
+
+// Configurar las cookies para que funcionen con HTTPS
+app.use(cookieParser());
+app.use((req, res, next) => {
+    res.cookie('token', req.cookies.token, {
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'none',
+        httpOnly: true
+    });
+    next();
+});
 
 app.use('/api/auth',authRouter)
 app.use('/api/users',userRouter)
