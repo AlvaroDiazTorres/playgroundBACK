@@ -15,10 +15,9 @@ const app = express()
 
 app.use(cookieParser())
 
-//cambiar la url cuando deploy
 app.use(cors({
-    origin: ['http://localhost:5173', 'https://playground-front-five.vercel.app', 'http://localhost:3000'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    origin: ['http://localhost:5173', 'https://playground-front-five.vercel.app', '83.37.32.61:5173'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'Origin', 'Accept'],
     exposedHeaders: ['Set-Cookie'],

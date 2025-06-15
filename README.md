@@ -41,19 +41,3 @@ npm i morgan
 npm i --save-dev @types/morgan
 ```
 
-Ejercicio 1:
-Crea el endpoint que liste todos los usuarios de la web
-A este endpoint solo puede acceder el usuario role=admin
-Crea routas, servicios, controllers, middleware
-
-
-Ejercicio 2:
-Valida mediante un middleware
-El formulario de registro
-- Comprueba que el email sea válido
-- Comprueba que el password se de minimo 4 letras
-
-
-Ejercicio 3:
-Crea un fronted con Vite + tailwind 4.0 + react
-
