@@ -26,7 +26,10 @@ app.use(cors({
 }));
 
 app.use(express.json())
-app.use(helmet())
+app.use(helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+    crossOriginOpenerPolicy: { policy: "same-origin-allow-popups" }
+}))
 app.use(compression())
 app.use(morgan('tiny'))
 const limiter = rateLimit({
@@ -41,15 +44,16 @@ app.use((req, res, next) => {
     res.cookie('token', req.cookies.token, {
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'none',
-        httpOnly: true
+        httpOnly: true,
+        path: '/'
     });
     next();
 });
 
 app.use('/api/auth',authRouter)
 app.use('/api/users',userRouter)
-app.use('/api/eventos', eventoRouter)
-app.use('/api/payments', paymentRouter)
+app.use('/api/eventos',eventoRouter)
+app.use('/api/payments',paymentRouter)
 
 app.get('/', (req:Request, res:Response)=>{
     res.send('Bienvenido al backend (api rest)')
